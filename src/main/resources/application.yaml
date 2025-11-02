@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: Spring_Security6
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/springsecurity
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update   # or create, create-drop, none — depends on your setup
+    show-sql: true       # shows SQL queries in logs
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+
+
+  security:
+    user:
+      name: lahu
+      password: lahu
+
+
+  web:
+    cors:
+      allowed-origins: "http://localhost:2025"
+      allowed-methods: "GET,POST,PUT,DELETE,PATCH,OPTIONS"
+      allowed-headers: "Authorization,Content-Type,X-Requested-With,Accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers"
+      exposed-headers: "Authorization,Content-Type"
+      allow-credentials: true
+      max-age: 3600
+
+server:
+  port: 9090
