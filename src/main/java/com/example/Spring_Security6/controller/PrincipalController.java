@@ -5,11 +5,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/vi/api/principle")
-public class PrincipleController {
+@RequestMapping("/v1/api/principal")
+public class PrincipalController {
 
     @GetMapping
-    public String principle() {
-        return "principle controller";
+    public String principal() {
+        return "principal controller";
     }
 }

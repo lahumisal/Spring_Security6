@@ -2,6 +2,8 @@ spring:
   application:
     name: Spring_Security6
 
+
+#######   Database Connection ###########
   datasource:
     url: jdbc:mysql://localhost:3306/springsecurity
     username: root
@@ -18,12 +20,8 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
 
 
-  security:
-    user:
-      name: lahu
-      password: lahu
 
-
+#######      CORS Configuration     ##########
   web:
     cors:
       allowed-origins: "http://localhost:2025"
