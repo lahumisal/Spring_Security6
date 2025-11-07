@@ -2,6 +2,7 @@ package com.example.Spring_Security6.service;
 
 import com.example.Spring_Security6.model.Users;
 import com.example.Spring_Security6.model.enums.Roles;
+import com.example.Spring_Security6.model.response.LoginResponse;
 import com.example.Spring_Security6.repository.UserRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,22 +39,40 @@ public class UserService {
         return userRepo.save(user);
     }
 
-    public String verifyUser(Users user) {
+    public LoginResponse verifyUser(Users user) {
         log.info("verifying the user");
         Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
         if(authentication.isAuthenticated()){
             log.info("Authentication result: {}", authentication.getPrincipal());
-            return jwtService.generateToken(user.getUsername());
+            
+            // Get user from database to retrieve full user details
+            Users dbUser = userRepo.findByUsername(user.getUsername());
+            
+            // Generate JWT token
+            String token = jwtService.generateToken(user.getUsername());
+            
+            // Create and return login response with username, password, and token
+            LoginResponse loginResponse = new LoginResponse();
+            loginResponse.setUsername(dbUser.getUsername());
+            loginResponse.setPassword(dbUser.getPassword()); // Hashed password from database
+            loginResponse.setToken(token);
+            
+            return loginResponse;
         }
-        return "faild";
+        return null; // Return null if authentication fails
     }
     
     public String logout(String token) {
         if (token != null && !token.isEmpty()) {
-            jwtService.blacklistToken(token);
-            log.info("Token blacklisted successfully");
-            return "Logout successful";
+            try {
+                jwtService.blacklistToken(token);
+                log.info("Token blacklisted successfully");
+                return "Logout successfully";
+            } catch (Exception e) {
+                log.error("Error during logout: {}", e.getMessage());
+                return "Logout not successfully";
+            }
         }
-        return "Invalid token";
+        return "Logout not successfully";
     }
 }

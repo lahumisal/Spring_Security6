@@ -1,9 +1,11 @@
 package com.example.Spring_Security6.controller;
 
 import com.example.Spring_Security6.model.Users;
+import com.example.Spring_Security6.model.response.LoginResponse;
 import com.example.Spring_Security6.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +27,12 @@ public class HomeController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody Users user) {
-        return userService.verifyUser(user);
+    public ResponseEntity<LoginResponse> login(@RequestBody Users user) {
+        LoginResponse loginResponse = userService.verifyUser(user);
+        if (loginResponse != null) {
+            return ResponseEntity.ok(loginResponse);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
     
     @PostMapping("/logout")
